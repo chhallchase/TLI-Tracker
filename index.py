@@ -92,6 +92,54 @@ def log_to_json(log_text):
     #return json.dumps(parsed_data, indent=4, ensure_ascii=False)
     return parsed_data
 
+def get_price_info(text):
+    try:
+        pattern_id = r'XchgSearchPrice----SynId = (\d+).*?\+filters\+1\+refer \[(\d+)\]'
+        match = re.findall(pattern_id, text, re.DOTALL)
+        result = list(match)
+        for i, item in enumerate(result, 1):
+            ids = item[1]
+            synid = item[0]
+            pattern = re.compile(
+                rf'----Socket RecvMessage STT----XchgSearchPrice----SynId = {synid}\s+'  # 匹配目标SynId
+                r'\[.*?\]\s*GameLog: Display: \[Game\]\s+'  # 匹配时间和固定前缀
+                r'(.*?)(?=----Socket RecvMessage STT----|$)',  # 匹配数据块内容（到下一个数据块或结束）
+                re.DOTALL  # 允许.匹配换行
+            )
+
+            # 查找目标数据块
+            match = pattern.search(text)
+            data_block = match.group(1)
+            if not match:
+                print(f'发现记录： ID:{item[1]}, 价格:-1')
+            # 提取所有+数字 [数值]中的数值（忽略currency）
+            value_pattern = re.compile(r'\+\d+\s+\[([\d.]+)\]')  # 匹配+数字 [x.x]格式
+            values = value_pattern.findall(data_block)
+            # 获得前30个values的平均值，但若values的长度小于30，则取全部的平均值
+            if len(values) == 0:
+                average_value = -1
+            else:
+                num_values = min(len(values), 30)
+                sum_values = sum(float(values[i]) for i in range(num_values))
+                average_value = sum_values / num_values
+            with open("id_table.conf", 'r', encoding="utf-8") as f:
+                id_table = f.readlines()
+                # 格式 key[空格]value
+                id_dict = {}
+                for line in id_table:
+                    parts = line.replace("\n", "").split(' ')
+                    if len(parts) == 2:
+                        id_dict[parts[0]] = parts[1]
+            name = id_dict[ids]
+            price = json.load(open("price.json", "r", encoding="utf-8"))
+            price[name] = round(average_value, 4)
+            with open("price.json", "w", encoding="utf-8") as f:
+                json.dump(price, f, indent=4, ensure_ascii=False)
+
+            print(f'更新物品价值： ID:{ids}, 名称:{name}, 价格:{round(average_value, 4)}')
+    except:
+        pass
+
 
 
 
@@ -129,19 +177,18 @@ def scanned_log(changed_text):
 
 def deal_change(changed_text):
     global is_in_map, all_time_passed, drop_list, income, t, drop_list_all, income_all
-    if "[Game] LevelMgr@ EnterLevel" in changed_text:
-        is_in_map = not is_in_map
-        if is_in_map:
-            drop_list = {}
-            income = 0
-
-
+    if "PageApplyBase@ _UpdateGameEnd: LastSceneName = World'/Game/Art/Maps/01SD/XZ_YuJinZhiXiBiNanSuo200/XZ_YuJinZhiXiBiNanSuo200.XZ_YuJinZhiXiBiNanSuo200' NextSceneName = World'/Game/Art/Maps" in changed_text:
+        is_in_map = True
+        drop_list = {}
+        income = 0
+    if "NextSceneName = World'/Game/Art/Maps/01SD/XZ_YuJinZhiXiBiNanSuo200/XZ_YuJinZhiXiBiNanSuo200.XZ_YuJinZhiXiBiNanSuo200'" in changed_text:
+        is_in_map = False
     texts = scanned_log(changed_text)
     for i in texts:
         data = log_to_json(i)
         data = data["DropItems"]
         for item in data:
-            print(data[item])
+            #print(data[item])
             if is_in_map == False:
                 is_in_map = True
             if not data[item].get("Picked", False):
@@ -215,9 +262,9 @@ class MyThread(threading.Thread):
                 else:
                     t = time.time()
                 things = self.history.read()
-                print(things)
-                print("=------=")
+                #print(things)
                 deal_change(things)
+                get_price_info(things)
                 if show_all:
                     label_drop_tmp = ""
                     for i in drop_list_all.keys():

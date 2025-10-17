@@ -31,7 +31,7 @@ python setup.py py2exe
 | `scanned_log`| 搜索日志文件中关于掉落的部分，传递到parse函数                                      |
 |`deal_change`| 搜索进入/离开地图的信息<br>并传入scanner_log搜索掉落<br>并解析掉落的物品类别，数量<br>将信息写入数组 |
 |`change_states`| 由`button_change`触发，更改掉落显示|
-
+|`get_price_info`| 在您在交易所查价时，自动读取日志文件<br>更新通货价格（前30卖单平均数）|
 ### 配置文件结构
 ### id_table.conf 
 匹配日志文件的ID和掉落物名称
