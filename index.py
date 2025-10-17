@@ -164,8 +164,8 @@ def deal_change(changed_text):
             with open("price.json", "r", encoding="utf-8") as f:
                 j = json.load(f)
                 if item_id in j.keys():
-                    income += j[item_id]
-                    income_all += j[item_id]
+                    income += j[item_id] * data[item]["item"]["Num"]
+                    income_all += j[item_id] * data[item]["item"]["Num"]
                     price = j[item_id]
             print("掉落:" + str(item_id))
             with open("drop.txt", 'a', encoding="utf-8") as f:
