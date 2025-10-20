@@ -1,5 +1,2 @@
 pywin32
-tkinter
 psutil
-re
-json
