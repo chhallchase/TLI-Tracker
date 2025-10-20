@@ -1,5 +1,3 @@
 pywin32
-tkinter
 psutil
-re
-json
+py2exe
