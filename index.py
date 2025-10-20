@@ -343,7 +343,7 @@ def deal_drop(drop_data, item_id_table, price_table):
         if str(base_id) in price_table:
             base_id = str(base_id)
             price = price_table[base_id]
-            if config_data.get("tax", 0) == 1:
+            if config_data.get("tax", 0) == 1 and base_id != "100300":
                 price = price * 0.875
             income += price * num
             income_all += price * num
