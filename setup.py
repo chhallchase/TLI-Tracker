@@ -7,7 +7,7 @@ options = {
 }
 
 setup(
-    version="0.0.1a3",
+    version="0.0.1a4",
     options=options,
     description="TorchFurry 火炬之光收益统计器 测试版",
     console=['index.py'],
