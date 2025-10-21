@@ -26,7 +26,7 @@ if os.path.exists("config.json") == False:
         }
         json.dump(config_data, f, ensure_ascii=False, indent=4)
 
-
+config_data = {}
 def convert_from_log_structure(log_text: str, verbose: bool = False):
     """
     将结构化日志文本转换为嵌套字典
@@ -566,6 +566,7 @@ class App(Tk):
         label_setting_1.grid(row=0, column=0, padx=5, pady=5)
         entry_setting_1 = ttk.Entry(self.inner_pannel_settings)
         entry_setting_1.grid(row=0, column=1, padx=5, pady=5)
+        global config_data
         # 选择计税 不计税
         with open("config.json", "r", encoding="utf-8") as f:
             config_data = f.read()
