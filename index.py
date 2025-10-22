@@ -1,6 +1,5 @@
 import time
 from datetime import datetime
-
 import psutil
 import win32gui
 import win32process
@@ -15,154 +14,48 @@ from tkinter.ttk import *
 from tkinter import ttk
 import ctypes
 import requests as rq
-server = "serverp.furtorch.heili.tech"
 import os
-if os.path.exists("config.json") == False:
+
+server = "serverp.furtorch.heili.tech"
+
+# Initialize configuration
+if not os.path.exists("config.json"):
     with open("config.json", "w", encoding="utf-8") as f:
         config_data = {
             "cost_per_map": 0,
             "opacity": 1.0,
             "tax": 0,
+            "user": ""
         }
         json.dump(config_data, f, ensure_ascii=False, indent=4)
 
+# Initialize translation mapping
+if not os.path.exists("translation_mapping.json"):
+    with open("translation_mapping.json", "w", encoding="utf-8") as f:
+        # Create empty translation mapping
+        translation_mapping = {}
+        json.dump(translation_mapping, f, ensure_ascii=False, indent=4)
+
 config_data = {}
-def convert_from_log_structure(log_text: str, verbose: bool = False):
-    """
-    Convert structured log text to nested dictionary
 
-    Parameters:
-        log_text: Text containing structured logs
-        verbose: Whether to output detailed log information
+# Track bag state and initialization status
+bag_state = {}
+bag_initialized = False
+first_scan = True
 
-    Returns:
-        Converted nested dictionary
-    """
-    # Split and filter empty lines
-    lines = [line.strip() for line in log_text.split('\n') if line.strip()]
-    stack  = []
-    root = {}
+def load_translation_mapping():
+    """Load or create translation mapping between Chinese and English item names"""
+    try:
+        with open("translation_mapping.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    except:
+        # If the file doesn't exist, create an empty mapping
+        return {}
 
-    if verbose:
-        print("=== Parsing Started ===")
-
-    for line in lines:
-        # Calculate level (number of '|')
-        level = line.count('|')
-        # Extract content (remove all '|' and trim)
-        content = re.sub(r'\|+', '', line).strip()
-
-        if verbose:
-            print(f"\nProcessing: '{line}'")
-            print(f"  Level: {level}, Content: '{content}'")
-
-        # Adjust stack to match current level
-        while len(stack) > level:
-            stack.pop()
-
-        # Determine parent node
-        if not stack:
-            parent = root
-        else:
-            parent = stack[-1]
-
-        # Skip empty parent node
-        if parent is None:
-            continue
-
-        # Parse key-value pairs (including [] cases)
-        if '[' in content and ']' in content:
-            # Extract key part and value part
-            key_part = content[:content.index('[')].strip()
-            value_part = content[content.index('[') + 1: content.rindex(']')].strip()
-
-            # Convert value type
-            if value_part.lower() == 'true':
-                value = True
-            elif value_part.lower() == 'false':
-                value = False
-            elif re.match(r'^-?\d+$', value_part):
-                value = int(value_part)
-            else:
-                value = value_part
-
-            # Handle multi-level keys (separated by '+')
-            keys = [k.strip() for k in key_part.split('+') if k.strip()]
-
-            current_node = parent
-
-            for i in range(len(keys)):
-                key = keys[i]
-                # Skip empty keys
-                if not key:
-                    continue
-
-                # Check if current node is valid
-                if current_node is None:
-                    continue
-
-                if i == len(keys) - 1:
-                    # Last key, set value
-                    current_node[key] = value
-                else:
-                    # Not the last key, ensure it's a dictionary and create a child node
-                    if not isinstance(current_node, dict):
-                        break
-
-                    if key not in current_node:
-                        current_node[key] = {}
-                    current_node = current_node[key]
-
-                    # Check if new node is valid
-                    if current_node is None:
-                        break
-
-            # Add current node to stack
-            stack.append(current_node)
-
-        # Handle keys without values (like +SpecialInfo)
-        else:
-            key_part = content.strip()
-            keys = [k.strip() for k in key_part.split('+') if k.strip()]
-
-            current_node = parent
-
-            for key in keys:
-                # Skip empty keys
-                if not key:
-                    continue
-
-                # Check if current node is valid
-                if current_node is None:
-                    continue
-
-                # Ensure current node is a dictionary
-                if not isinstance(current_node, dict):
-                    break
-
-                # Create a child node (if it doesn't exist)
-                if key not in current_node:
-                    current_node[key] = {}
-                current_node = current_node[key]
-
-                # Check if new node is valid
-                if current_node is None:
-                    break
-
-            # Add current node to stack
-            stack.append(current_node)
-
-    if verbose:
-        print("\n=== Parsing Complete ===")
-
-    return root
-
-
-def log_to_json(log_text):
-    """Convert log text to JSON string"""
-    parsed_data = convert_from_log_structure(log_text)
-    #return json.dumps(parsed_data, indent=4, ensure_ascii=False)
-    return parsed_data
+def save_translation_mapping(mapping):
+    """Save translation mapping to file"""
+    with open("translation_mapping.json", "w", encoding="utf-8") as f:
+        json.dump(mapping, f, ensure_ascii=False, indent=4)
 
 def get_price_info(text):
     try:
@@ -181,11 +74,14 @@ def get_price_info(text):
 
             # Find target data block
             match = pattern.search(text)
-            data_block = match.group(1)
             if not match:
                 print(f'Record found: ID:{item[1]}, Price:-1')
+                continue
+                
+            data_block = match.group(1)
             if int(item[1]) == 100300:
                 continue
+                
             # Extract all +number [value] values (ignore currency)
             value_pattern = re.compile(r'\+\d+\s+\[([\d.]+)\]')  # Match +number [x.x] format
             values = value_pattern.findall(data_block)
@@ -196,11 +92,11 @@ def get_price_info(text):
                 num_values = min(len(values), 30)
                 sum_values = sum(float(values[i]) for i in range(num_values))
                 average_value = sum_values / num_values
+                
             with open("full_table.json", 'r', encoding="utf-8") as f:
                 full_table = json.load(f)
                 try:
                     full_table[ids]['last_time'] = round(time.time())
-                    #full_table[ids]['from'] = "Local"
                     full_table[ids]['from'] = "FurryHeiLi"
                     full_table[ids]['price'] = round(average_value, 4)
                 except:
@@ -212,199 +108,283 @@ def get_price_info(text):
     except Exception as e:
         print(e)
 
+def initialize_bag_state(text):
+    """Initialize the bag state by scanning all current items"""
+    global bag_state, bag_initialized, first_scan
+    
+    if not first_scan:
+        return False  # Only try to initialize on the first scan
+    
+    first_scan = False
+    
+    # Try to find initialization marker
+    if "PlayerInitPkgMgr" in text or "Login2Client" in text:
+        print("Detected player login or initialization - resetting bag state")
+        bag_state.clear()
+        return True
+    
+    # Pattern to match all bag items
+    pattern = r'\[.*?\]\[.*?\]GameLog: Display: \[Game\] BagMgr@:Modfy BagItem PageId = (\d+) SlotId = (\d+) ConfigBaseId = (\d+) Num = (\d+)'
+    matches = re.findall(pattern, text)
+    
+    if len(matches) > 10:  # Assume we found a big batch of items - good for initialization
+        print(f"Found {len(matches)} bag items - initializing bag state")
+        for match in matches:
+            page_id, slot_id, config_base_id, num = match
+            # Create a unique key for this item slot
+            item_key = f"{page_id}:{slot_id}:{config_base_id}"
+            num = int(num)
+            # Update the bag state
+            bag_state[item_key] = num
+            
+        bag_initialized = True
+        return True
+    
+    return False
 
+def scan_for_bag_changes(text):
+    """Scan the log for bag item modifications"""
+    global bag_state, bag_initialized
+    
+    # Check if we need to initialize
+    if not bag_initialized:
+        if initialize_bag_state(text):
+            return []  # Skip drop detection during initialization
+    
+    # Pattern to match bag item modifications
+    pattern = r'\[.*?\]\[.*?\]GameLog: Display: \[Game\] BagMgr@:Modfy BagItem PageId = (\d+) SlotId = (\d+) ConfigBaseId = (\d+) Num = (\d+)'
+    matches = re.findall(pattern, text)
+    
+    if not matches:
+        return []
+        
+    drops = []
+    
+    # Track total counts of each item type before this update
+    previous_totals = {}
+    for item_key, qty in bag_state.items():
+        _, _, item_id = item_key.split(':')
+        if item_id not in previous_totals:
+            previous_totals[item_id] = 0
+        previous_totals[item_id] += qty
+    
+    # Process all matches first to get the current state
+    current_state = bag_state.copy()
+    for match in matches:
+        page_id, slot_id, config_base_id, num = match
+        # Create a unique key for this item slot
+        item_key = f"{page_id}:{slot_id}:{config_base_id}"
+        num = int(num)
+        
+        # Update the current state
+        current_state[item_key] = num
+    
+    # Now compute total counts after the update
+    current_totals = {}
+    for item_key, qty in current_state.items():
+        _, _, item_id = item_key.split(':')
+        if item_id not in current_totals:
+            current_totals[item_id] = 0
+        current_totals[item_id] += qty
+    
+    # Compare total counts to detect drops, even across stacks
+    for item_id, current_total in current_totals.items():
+        previous_total = previous_totals.get(item_id, 0)
+        if current_total > previous_total:
+            # We got more of this item
+            drops.append((item_id, current_total - previous_total))
+    
+    # Update the bag state
+    bag_state.update(current_state)
+    
+    return drops
 
+def detect_map_change(text):
+    """Detect entering or leaving a map from the log text"""
+    # Pattern to match entering a map from the refuge
+    enter_pattern = r"PageApplyBase@ _UpdateGameEnd: LastSceneName = World'/Game/Art/Maps/01SD/XZ_YuJinZhiXiBiNanSuo200/XZ_YuJinZhiXiBiNanSuo200.XZ_YuJinZhiXiBiNanSuo200' NextSceneName = World'/Game/Art/Maps"
+    
+    # Pattern to match returning to the refuge
+    exit_pattern = r"NextSceneName = World'/Game/Art/Maps/01SD/XZ_YuJinZhiXiBiNanSuo200/XZ_YuJinZhiXiBiNanSuo200.XZ_YuJinZhiXiBiNanSuo200'"
+    
+    entering_map = bool(re.search(enter_pattern, text))
+    exiting_map = bool(re.search(exit_pattern, text))
+    
+    return entering_map, exiting_map
 
 all_time_passed = 1
 
-hwnd = win32gui.FindWindow(None, "Torchlight: Infinite  ")
-tid, pid = win32process.GetWindowThreadProcessId(hwnd)
-process = psutil.Process(pid)
-position_game = process.exe()
-position_log = position_game + "/../../../TorchLight/Saved/Logs/UE_game.log"
-position_log = position_log.replace("\\", "/")
-print(position_log)
-with open(position_log, "r", encoding="utf-8") as f:
-    print(f.read(100))
-    # Go to the end of the file
-    f.seek(0, 2)
+# Try to find the game and log file
+game_found = False
+try:
+    hwnd = win32gui.FindWindow(None, "Torchlight: Infinite  ")
+    if hwnd:
+        tid, pid = win32process.GetWindowThreadProcessId(hwnd)
+        process = psutil.Process(pid)
+        position_game = process.exe()
+        position_log = position_game + "/../../../TorchLight/Saved/Logs/UE_game.log"
+        position_log = position_log.replace("\\", "/")
+        print(f"Log file location: {position_log}")
+        with open(position_log, "r", encoding="utf-8") as f:
+            print(f"Successfully opened log file, first 100 characters: {f.read(100)}")
+            # Go to the end of the file
+            f.seek(0, 2)
+        game_found = True
+except Exception as e:
+    print(f"Error finding game: {e}")
+    # Use a default log path as fallback
+    position_log = "UE_game.log"
+    
+if not game_found:
+    messagebox.showwarning("Game Not Found", 
+                        "Could not find Torchlight: Infinite game process or log file. "\
+                        "The tool will continue running but won't be able to track drops until the game is started.\n\n"\
+                        "Please make sure the game is running with logging enabled, then restart this tool.")
+
 exclude_list = []
 
-def scanned_log(changed_text):
-    lines = changed_text.split('\n')
-    drop_blocks = []
-    i = 0
-    line_count = len(lines)
-
-    while i < line_count:
-        line = lines[i]
-        # Match start marker: +DropItems+1+ (case sensitive)
-        if re.search(r'\+DropItems\+1\+', line):
-            # Initialize current block, including the start line
-            current_block = [line]
-            j = i + 1
-
-            # Collect subsequent lines until end marker
-            while j < line_count:
-                current_line = lines[j]
-
-                # End the current block when encountering a line containing "Display:" (including this line)
-                if 'Display:' in current_line:
-                    current_block.append(current_line)
-                    j += 1
-                    break
-
-                # Collect all related lines (including sub-lines and sibling lines)
-                current_block.append(current_line)
-                j += 1
-
-            # Add all lines of the current block to the result list, joined by newlines
-            drop_blocks.append('\n'.join(current_block))
-            # Move index to the next line after the current block
-            i = j
+def process_drops(drops, item_id_table, price_table):
+    """Process detected drops and update statistics"""
+    global income, income_all, drop_list, drop_list_all, config_data
+    
+    for drop in drops:
+        item_id, amount = drop
+        item_id = str(item_id)
+        
+        # Check if we have a name for this item
+        if item_id in item_id_table:
+            item_name = item_id_table[item_id]
         else:
-            # No start marker found, check the next line
-            i += 1
-    return drop_blocks
-
-pending_items = {}
-def deal_drop(drop_data, item_id_table, price_table):
-    """Update drop statistics"""
-    global income, income_all, drop_list, drop_list_all
-    def invoke_drop_item_processing(item_data, item_key):
-        global income, income_all, drop_list, drop_list_all, exclude_list, pending_items, config_data
-        """Process individual dropped item data"""
-        # Check if picked up (Picked may be at root level or inside item)
-        picked = False
-        print(item_data)
-        if "Picked" in item_data:
-            picked = item_data["Picked"]
-        elif isinstance(item_data.get("item"), dict) and "Picked" in item_data["item"]:
-            picked = item_data["item"]["Picked"]
-
-        if not picked:
-            return
-
-        # Process SpecialInfo (nested item information)
-        item_info = item_data.get("item", {})
-        if isinstance(item_info, dict) and "SpecialInfo" in item_info:
-            special_info = item_info["SpecialInfo"]
-            if isinstance(special_info, dict):
-                if "BaseId" in special_info:
-                    item_info["BaseId"] = special_info["BaseId"]
-                if "Num" in special_info:
-                    item_info["Num"] = special_info["Num"]
-
-        # Get base ID and quantity
-        base_id = item_info.get("BaseId")
-        num = item_info.get("Num", 0)
-
-        if base_id is None:
-            return
-
-        # Convert ID to name
-        base_id_str = str(base_id)
-        item_name = base_id_str  # Default use ID as name
-
-        if base_id_str in item_id_table:
-            item_name = item_id_table[base_id_str]
-        else:
-            # No local data, add to pending queue
-            global pending_items
-            if base_id_str not in pending_items:
-                print(f"[NETWORK] ID {base_id_str} doesn't exist locally, fetching")
-                pending_items[base_id_str] = num
+            # No item name found, use ID as name and add to pending queue
+            item_name = f"Unknown item (ID: {item_id})"
+            if item_id not in pending_items:
+                print(f"[NETWORK] ID {item_id} doesn't exist locally, fetching")
+                pending_items[item_id] = amount
             else:
-                pending_items[base_id_str] += num
-                print(f"[NETWORK] ID {base_id_str} already in queue, accumulated: {pending_items[base_id_str]}")
-            return
-
-        # Check if item name is empty
-        if not item_name.strip():
-            return
-
-        # Check if in exclusion list
-        global exclude_list
+                pending_items[item_id] += amount
+                print(f"[NETWORK] ID {item_id} already in queue, accumulated: {pending_items[item_id]}")
+            continue
+            
+        # Check exclusion list
         if exclude_list and item_name in exclude_list:
-            print(f"Excluded: {item_name} x{num}")
-            return
-        print(base_id)
-        # Count quantity
-        if base_id not in drop_list:
-            drop_list[base_id] = 0
-        drop_list[base_id] += num
+            print(f"Excluded: {item_name} x{amount}")
+            continue
+            
+        # Update drop counters
+        if item_id not in drop_list:
+            drop_list[item_id] = 0
+        drop_list[item_id] += amount
 
-        if base_id not in drop_list_all:
-            drop_list_all[base_id] = 0
-        drop_list_all[base_id] += num
-
+        if item_id not in drop_list_all:
+            drop_list_all[item_id] = 0
+        drop_list_all[item_id] += amount
+        
         # Calculate price
         price = 0.0
-        if str(base_id) in price_table:
-            base_id = str(base_id)
-            price = price_table[base_id]
-            if config_data.get("tax", 0) == 1 and base_id != "100300":
+        if item_id in price_table:
+            price = price_table[item_id]
+            if config_data.get("tax", 0) == 1 and item_id != "100300":
                 price = price * 0.875
-            income += price * num
-            income_all += price * num
-
-        # Log to file
+            income += price * amount
+            income_all += price * amount
+            
+        # Log to drop.txt
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        log_line = f"[{timestamp}] Drop: {item_name} x{num} ({round(price, 3)}/each)\n"
+        log_line = f"[{timestamp}] Drop: {item_name} x{amount} ({round(price, 3)}/each)\n"
         with open("drop.txt", "a", encoding="utf-8") as f:
             f.write(log_line)
+            
+        print(f"Processed drop: {item_name} x{amount} ({round(price, 3)}/each)")
 
-    def invoke_drop_items_recursive(data, path=""):
-        """Recursively process all drop items"""
-        for key, value in data.items():
-            current_path = f"{path}.{key}" if path else key
-
-            # Check if it contains drop data
-            if isinstance(value, dict) and "item" in value:
-                # Check if it has Picked marker
-                has_picked = ("Picked" in value) or \
-                             (isinstance(value["item"], dict) and "Picked" in value["item"])
-
-                if has_picked:
-                    invoke_drop_item_processing(value, current_path)
-
-            # Recursively process sub-items
-            if isinstance(value, dict):
-                invoke_drop_items_recursive(value, current_path)
-
-    # Start recursive processing
-    invoke_drop_items_recursive(drop_data)
 def deal_change(changed_text):
     global root
     global is_in_map, all_time_passed, drop_list, income, t, drop_list_all, income_all, total_time, map_count
-    if "PageApplyBase@ _UpdateGameEnd: LastSceneName = World'/Game/Art/Maps/01SD/XZ_YuJinZhiXiBiNanSuo200/XZ_YuJinZhiXiBiNanSuo200.XZ_YuJinZhiXiBiNanSuo200' NextSceneName = World'/Game/Art/Maps" in changed_text:
+    
+    # Check if entering/leaving maps based on scene changes
+    entering_map, exiting_map = detect_map_change(changed_text)
+    
+    if entering_map:
         is_in_map = True
         drop_list = {}
         income = -root.cost
         income_all += -root.cost
         map_count += 1
-    if "NextSceneName = World'/Game/Art/Maps/01SD/XZ_YuJinZhiXiBiNanSuo200/XZ_YuJinZhiXiBiNanSuo200.XZ_YuJinZhiXiBiNanSuo200'" in changed_text:
+        
+    if exiting_map:
         is_in_map = False
         total_time += time.time() - t
-    texts = changed_text
+    
+    # Load item data and prices
     id_table = {}
     price_table = {}
-    with open("full_table.json", 'r', encoding="utf-8") as f:
-        f = json.load(f)
-    for i in f.keys():
-        id_table[str(i)] = f[i]["name"]
-        price_table[str(i)] = f[i]["price"]
-    texts = scanned_log(texts)
-    if texts == []:
+    try:
+        with open("full_table.json", 'r', encoding="utf-8") as f:
+            f_data = json.load(f)
+            for i in f_data.keys():
+                id_table[str(i)] = f_data[i]["name"]
+                price_table[str(i)] = f_data[i]["price"]
+    except Exception as e:
+        print(f"Error loading item data: {e}")
         return
-    for text in texts:
-        text = convert_from_log_structure(text)
-        deal_drop(text, id_table, price_table)
-    print(texts)
-    if texts != []:
+    
+    # Scan for bag changes (drops)
+    drops = scan_for_bag_changes(changed_text)
+    if drops:
+        process_drops(drops, id_table, price_table)
         root.reshow()
-        if is_in_map == False:
+        if not is_in_map:
             is_in_map = True
+
+# Debug function to examine log format and bag state
+def debug_log_format():
+    """Print recent log entries and current bag state to help diagnose issues"""
+    try:
+        print("=== CURRENT BAG STATE ===")
+        print(f"Initialized: {bag_initialized}")
+        print(f"Total tracked slots: {len(bag_state)}")
+        
+        # Group by item ID for better display
+        grouped = {}
+        for key, amount in bag_state.items():
+            _, _, item_id = key.split(':')
+            if item_id not in grouped:
+                grouped[item_id] = 0
+            grouped[item_id] += amount
+        
+        # Load item names if available
+        try:
+            with open("full_table.json", 'r', encoding="utf-8") as f:
+                item_data = json.load(f)
+            
+            print("Item totals:")
+            for item_id, total in grouped.items():
+                name = item_data.get(item_id, {}).get("name", f"Unknown (ID: {item_id})")
+                print(f"  {name}: {total}")
+        except:
+            print("Item IDs and totals:")
+            for item_id, total in grouped.items():
+                print(f"  ID {item_id}: {total}")
+                
+        print("\n=== RECENT LOG ENTRIES ===")
+        with open(position_log, "r", encoding="utf-8") as f:
+            # Get the last 50 lines of the log
+            lines = f.readlines()[-50:]
+            for line in lines:
+                # Only print lines related to bag changes or map changes
+                if "BagMgr" in line or "PageApplyBase" in line or "XZ_YuJinZhiXiBiNanSuo200" in line:
+                    print(line.strip())
+        print("=== END OF DEBUG INFO ===")
+        
+        # Show in a dialog
+        messagebox.showinfo("Debug Information", 
+                        f"Debug information has been printed to the console.\n\n"
+                        f"Bag state initialized: {bag_initialized}\n"
+                        f"Total items tracked: {len(grouped)}\n"
+                        f"Total inventory slots: {len(bag_state)}")
+    except Exception as e:
+        print(f"Error in debug function: {e}")
+        import traceback
+        traceback.print_exc()
 
 is_in_map = False
 drop_list = {}
@@ -415,15 +395,16 @@ t = time.time()
 show_all = False
 total_time = 0
 map_count = 0
+pending_items = {}
 
 class App(Tk):
-    show_type = ["Compass","Currency","Special Item","Memory Material","Equipment Material","Gameplay Ticket","Map Ticket","Cube Material","Corruption Material","Dream Material","Tower Material","BOSS Ticket","Memory Glow","Divine Emblem","Overlap Material"]
+    show_type = ["Compass","Currency","Special Item","Memory Material","Equipment Material","Gameplay Ticket","Map Ticket","Cube Material","Corruption Material","Dream Material","Tower Material","BOSS Ticket","Memory Glow","Divine Emblem","Overlap Material","Hard Currency"]
     # Checkmark, Circle, X
     status = ["✔", "◯", "✘"]
     cost = 0
     def __init__(self):
         super().__init__()
-        self.title("FurTorch v0.0.1a4")
+        self.title("FurTorch v0.0.1a5 - English")
         self.geometry()
 
         ctypes.windll.shcore.SetProcessDpiAwareness(1)
@@ -481,7 +462,7 @@ class App(Tk):
         # Buttons: Drops, Filter, Log, Settings with equal height and width
         button_drops = ttk.Button(advanced_frame, text="Drops", width=7)
         button_filter = ttk.Button(advanced_frame, text="Filter", width=7)
-        button_log = ttk.Button(advanced_frame, text="Log", width=7)
+        button_log = ttk.Button(advanced_frame, text="Debug", width=7)
         button_settings = ttk.Button(advanced_frame, text="Settings", width=7)
         button_drops.grid(row=0, column=0, padx=5, ipady=10)
         button_filter.grid(row=0, column=1, padx=5, ipady=10)
@@ -495,6 +476,8 @@ class App(Tk):
 
         self.button_settings.config(command=self.show_settings, cursor="hand2")
         self.button_drops.config(command=self.show_diaoluo, cursor="hand2")
+        # Add debug button for log format
+        self.button_log.config(command=debug_log_format, cursor="hand2")
 
         self.inner_pannel_drop = Toplevel(self)
         self.inner_pannel_drop.title("Drops")
@@ -585,6 +568,11 @@ class App(Tk):
         self.scale_setting_2 = ttk.Scale(self.inner_pannel_settings, from_=0.1, to=1.0, orient=HORIZONTAL)
         self.scale_setting_2.grid(row=1, column=1, padx=5, pady=5)
         self.scale_setting_2.config(command=self.change_opacity)
+        
+        # Reset button
+        reset_button = ttk.Button(self.inner_pannel_settings, text="Reset Tracking", command=self.reset_tracking)
+        reset_button.grid(row=3, column=0, columnspan=2, padx=5, pady=10)
+        
         print(config_data)
         self.entry_setting_1.insert(0, str(config_data["cost_per_map"]))
         self.entry_setting_1.bind("<Return>", lambda event: self.change_cost(self.entry_setting_1.get()))
@@ -599,6 +587,30 @@ class App(Tk):
         self.attributes('-topmost', True)
         self.inner_pannel_drop.attributes('-topmost', True)
         self.inner_pannel_settings.attributes('-topmost', True)
+        
+    def reset_tracking(self):
+        """Reset all tracking data"""
+        global bag_state, bag_initialized, first_scan, drop_list, drop_list_all, income, income_all, total_time, map_count
+        
+        if messagebox.askyesno("Reset Tracking", 
+                         "Are you sure you want to reset all tracking data? This will clear all drop statistics."):
+            bag_state.clear()
+            bag_initialized = False
+            first_scan = True
+            drop_list.clear()
+            drop_list_all.clear()
+            income = 0
+            income_all = 0
+            total_time = 0
+            map_count = 0
+            
+            # Update UI
+            self.label_current_earn.config(text=f"🔥 0")
+            self.label_map_count.config(text=f"🎫 0")
+            self.inner_pannel_drop_listbox.delete(1, END)
+            
+            messagebox.showinfo("Reset Complete", "All tracking data has been reset.")
+            
     def change_tax(self, value):
         global config_data
         with open("config.json", "r", encoding="utf-8") as f:
@@ -677,8 +689,10 @@ class App(Tk):
             self.label_current_earn.config(text=f"🔥 {round(income, 2)}")
         self.inner_pannel_drop_listbox.delete(1, END)
         for i in tmp.keys():
-
             item_id = str(i)
+            if item_id not in full_table:
+                continue
+                
             item_name = full_table[item_id]["name"]
             item_type = full_table[item_id]["type"]
             if item_type not in self.show_type:
@@ -695,49 +709,56 @@ class App(Tk):
             item_price = full_table[item_id]["price"]
             if config_data.get("tax", 0) == 1 and item_id != "100300":
                 item_price = item_price * 0.875
-            self.inner_pannel_drop_listbox.insert(END, f"{status} {item_name} x{tmp[i]} [{tmp[i] * item_price}]")
+            self.inner_pannel_drop_listbox.insert(END, f"{status} {item_name} x{tmp[i]} [{round(tmp[i] * item_price, 2)}]")
 
     def show_all_type(self):
-        self.show_type = ["Compass","Currency","Special Item","Memory Material","Equipment Material","Gameplay Ticket","Map Ticket","Cube Material","Corruption Material","Dream Material","Tower Material","BOSS Ticket","Memory Glow","Divine Emblem","Overlap Material"]
+        self.show_type = ["Compass","Currency","Special Item","Memory Material","Equipment Material","Gameplay Ticket","Map Ticket","Cube Material","Corruption Material","Dream Material","Tower Material","BOSS Ticket","Memory Glow","Divine Emblem","Overlap Material", "Hard Currency"]
         self.reshow()
     def show_tonghuo(self):
-        self.show_type = ["Currency"]
+        self.show_type = ["Currency", "Hard Currency"]
         self.reshow()
     def show_huijing(self):
-        self.show_type = ["Equipment Material"]
+        self.show_type = ["Equipment Material", "Ashes"]
         self.reshow()
     def show_luopan(self):
         self.show_type = ["Compass"]
         self.reshow()
     def show_yingguang(self):
-        self.show_type = ["Memory Glow"]
+        self.show_type = ["Memory Glow", "Memory Fluorescence"]
         self.reshow()
     def show_qita(self):
         self.show_type = ["Special Item","Memory Material","Gameplay Ticket","Map Ticket","Cube Material","Corruption Material","Dream Material","Tower Material","BOSS Ticket","Divine Emblem","Overlap Material"]
         self.reshow()
+
 class MyThread(threading.Thread):
     history = ""
     def run(self):
         global all_time_passed, income, drop_list, t, root
-        self.history = open(position_log, "r", encoding="utf-8")
-        self.history.seek(0, 2)
+        try:
+            self.history = open(position_log, "r", encoding="utf-8")
+            self.history.seek(0, 2)
+        except:
+            print(f"Could not open log file at {position_log}")
+            self.history = None
+            
         while True:
             try:
                 time.sleep(1)
-                things = self.history.read()
-                # print(things)
-                deal_change(things)
-                get_price_info(things)
+                if self.history:
+                    things = self.history.read()
+                    # Process log changes
+                    deal_change(things)
+                    get_price_info(things)
                 if is_in_map:
                     m = int((time.time() - t) // 60)
                     s = int((time.time() - t) % 60)
                     root.label_current_time.config(text=f"Current: {m}m{s}s")
-                    root.label_current_speed.config(text=f"🔥 {round(income / ((time.time() - t) / 60), 2)} /min")
+                    root.label_current_speed.config(text=f"🔥 {round(income / max((time.time() - t) / 60, 0.01), 2)} /min")
                     tmp_total_time = total_time + (time.time() - t)
                     m = int(tmp_total_time // 60)
                     s = int(tmp_total_time % 60)
                     root.label_total_time.config(text=f"Total: {m}m{s}s")
-                    root.label_total_speed.config(text=f"🔥 {round(income_all / (tmp_total_time / 60), 2)} /min")
+                    root.label_total_speed.config(text=f"🔥 {round(income_all / max(tmp_total_time / 60, 0.01), 2)} /min")
                 else:
                     t = time.time()
             except Exception as e:
@@ -746,27 +767,63 @@ class MyThread(threading.Thread):
                 import traceback
                 traceback.print_exc()
 
-
 def price_update():
+    """Get price updates from the server and handle translations"""
     while True:
         try:
+            # Get data from server (in Chinese)
             r = rq.get(f"http://{server}/get", timeout=10).json()
+            
+            # Load our English version of the items
+            with open("en_id_table.json", 'r', encoding="utf-8") as f:
+                english_items = json.load(f)
+                
+            # Create the translation mapping if needed
+            translation_mapping = load_translation_mapping()
+            
+            # Update the translation mapping
+            for item_id, item_data in r.items():
+                chinese_name = item_data["name"]
+                
+                # If we have an English name for this ID in our translation table
+                if item_id in english_items:
+                    english_name = english_items[item_id]["name"]
+                    english_type = english_items[item_id]["type"]
+                    
+                    # Store the translation mapping
+                    translation_mapping[chinese_name] = english_name
+                    
+                    # Update the item data with English info
+                    r[item_id]["name"] = english_name
+                    r[item_id]["type"] = english_type
+            
+            # Save the updated mapping
+            save_translation_mapping(translation_mapping)
+            
+            # Save the English version of the data
             with open("full_table.json", 'w', encoding="utf-8") as f:
                 json.dump(r, f, indent=4, ensure_ascii=False)
+                
             print("Price update successful")
-            n = pending_items
+            
+            # Process pending items
+            n = pending_items.copy()
             for i in n.keys():
-                r = rq.get(f"http://{server}/gowork?id="+i, timeout=10).json()
-                del pending_items[i]
-                print(f"[NETWORK] ID {i} fetch completed")
+                try:
+                    r = rq.get(f"http://{server}/gowork?id="+i, timeout=10).json()
+                    del pending_items[i]
+                    print(f"[NETWORK] ID {i} fetch completed")
+                except Exception as e:
+                    print(f"Error processing pending item {i}: {e}")
+                
             time.sleep(90)
         except Exception as e:
             print("Price update failed: " + str(e))
             time.sleep(10)
 
 
-
 def price_submit(ids, price, user):
+    """Submit price data to the server"""
     print(price)
     try:
         r = rq.get(f"http://{server}/update?user={user}&ids={ids}&new_price={price}", timeout=10).json()
@@ -776,6 +833,7 @@ def price_submit(ids, price, user):
         print(e)
 
 def get_user():
+    """Get or register user ID"""
     with open("config.json", "r", encoding="utf-8") as f:
         config_data = json.load(f)
     if not config_data.get("user", False):
@@ -792,8 +850,46 @@ def get_user():
     return user_id
 
 
+def initialize_data_files():
+    """Initialize the English data files"""
+    # Check if we need to create full_table.json from en_id_table.json
+    if os.path.exists("en_id_table.json") and not os.path.exists("full_table.json"):
+        try:
+            # Load English ID table
+            with open("en_id_table.json", 'r', encoding="utf-8") as f:
+                english_items = json.load(f)
+                
+            # Create initial full_table.json with prices set to 0
+            full_table = {}
+            for item_id, item_data in english_items.items():
+                full_table[item_id] = {
+                    "name": item_data["name"],
+                    "type": item_data["type"],
+                    "price": 0
+                }
+                
+            # Save the initial full_table.json
+            with open("full_table.json", 'w', encoding="utf-8") as f:
+                json.dump(full_table, f, indent=4, ensure_ascii=False)
+                
+            print("Created initial full_table.json from en_id_table.json")
+        except Exception as e:
+            print(f"Error initializing data files: {e}")
+
+
+# Initialize data files before starting the application
+initialize_data_files()
+
+# Create the main application
 root = App()
 root.wm_attributes('-topmost', 1)
+
+# Start the log reading thread
 MyThread().start()
+
+# Start the price update thread
 import _thread
 _thread.start_new_thread(price_update, ())
+
+# Start the main loop
+root.mainloop()

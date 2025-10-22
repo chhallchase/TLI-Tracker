@@ -1,0 +1,962 @@
+{
+"1001": {
+"name": "Starry Goose Fire",
+"type": "Memory Fluorescence"
+},
+"1009": {
+"name": "Long Four-Grid Copy Slate",
+"type": "Magic Cube Material"
+},
+"1011": {
+"name": "Return of the Stars",
+"type": "Memory Fluorescence"
+},
+"1012": {
+"name": "Hungry Goods Spreading Across the Prairie",
+"type": "Memory Fluorescence"
+},
+"5011": {
+"name": "Forgotten Water",
+"type": "Hard Currency"
+},
+"5028": {
+"name": "Echoes from Another World",
+"type": "Hard Currency"
+},
+"5029": {
+"name": "Reversing the Clockwork",
+"type": "Hard Currency"
+},
+"5030": {
+"name": "Twin Reflections",
+"type": "Special Item"
+},
+"5031": {
+"name": "Legendary Duck",
+"type": "Special Item"
+},
+"5080": {
+"name": "Energy Core",
+"type": "Equipment Material"
+},
+"5140": {
+"name": "Remembrance Fragments",
+"type": "Remembrance Material"
+},
+"5143": {
+"name": "Remembrance Gossamer - Rare",
+"type": "Remembrance Material"
+},
+"5144": {
+"name": "Remembrance Gossamer - Excellent",
+"type": "Remembrance Material"
+},
+"5201": {
+"name": "Godhead Fragment",
+"type": "Magic Cube Material"
+},
+"5202": {
+"name": "Godhead Contract - Fragment",
+"type": "Magic Cube Material"
+},
+"5210": {
+"name": "Divine Pyroxene",
+"type": "Cube Material"
+},
+"5220": {
+"name": "Sublime Wedge (Magic)",
+"type": "Cube Material"
+},
+"5230": {
+"name": "Sublime Wedge (Rare)",
+"type": "Cube Material"
+},
+"5240": {
+"name": "Unifying Wedge",
+"type": "Cube Material"
+},
+"5250": {
+"name": "Sublime Wedge (Legendary)",
+"type": "Cube Material"
+},
+"5300": {
+"name": "Eternal Fragment",
+"type": "Special Item"
+},
+"5310": {
+"name": "Maze City Echoes - Momentary",
+"type": "Game Ticket"
+},
+"5311": {
+"name": "Maze City Echoes - Eternal",
+"type": "Game Ticket"
+},
+"5401": {
+"name": "God of Strength Contract - God of Strength",
+"type": "Magic Cube Material"
+},
+"5402": {
+"name": "God of Strength Contract - Brave",
+"type": "Magic Cube Material"
+},
+"5403": {
+"name": "God of Strength Contract - Striker",
+"type": "Magic Cube Material"
+},
+"5404": {
+"name": "God of Strength Contract - Warlord",
+"type": "Magic Cube Material"
+},
+"5405": {
+"name": "God of Strength Contract - God of Hunting",
+"type": "Magic Cube Material"
+},
+"5406": {
+"name": "God of Strength Contract - Sharpshooter",
+"type": "Magic Cube Material"
+},
+"5407": {
+"name": "God of Strength Contract - Blade Runner",
+"type": "Magic Cube Material"
+},
+"5408": {
+"name": "Godhead Contract - Druid",
+"type": "Magic Cube Material"
+},
+"5409": {
+"name": "Godhead Contract - God of Knowledge",
+"type": "Magic Cube Material"
+},
+"5410": {
+"name": "Godhead Contract - Mage",
+"type": "Magic Cube Material"
+},
+"5411": {
+"name": "Godhead Contract - Mystic",
+"type": "Magic Cube Material"
+},
+"5412": {
+"name": "Godhead Contract - Elementalist",
+"type": "Magic Cube Material"
+},
+"5413": {
+"name": "Godhead Contract - God of War",
+"type": "Magic Cube Material"
+},
+"5414": {
+"name": "Godhead Contract - Shadow Dancer",
+"type": "Magic Cube Material"
+},
+"5415": {
+"name": "Godhead Contract - Swift Warrior",
+"type": "Magic Cube Material"
+},
+"5416": {
+"name": "Godhead Contract - Ranger",
+"type": "Magic Cube Material"
+},
+"5417": {
+"name": "Godhead Contract - Deception God",
+"type": "Magic Cube Material"
+},
+"5418": {
+"name": "Godhead Contract - Shadow Slave",
+"type": "Magic Cube Material"
+},
+"5419": {
+"name": "Godhead Contract - Psychic",
+"type": "Magic Cube Material"
+},
+"5420": {
+"name": "Godhead Contract - Shadow Warlock",
+"type": "Magic Cube Material"
+},
+"5421": {
+"name": "Godhead Contract - Mechanical God",
+"type": "Magic Cube Material"
+},
+"5422": {
+"name": "Godhead Contract - Mechanic",
+"type": "Magic Cube Material"
+},
+"5423": {
+"name": "Godhead Contract - Iron Vanguard",
+"type": "Magic Cube Material"
+},
+"5424": {
+"name": "Godhead Contract - Alchemist",
+"type": "Magic Cube Material"
+},
+"5425": {
+"name": "Godhead Contract - Fighter",
+"type": "Magic Cube Material"
+},
+"5426": {
+"name": "Godhead Contract - Assassin",
+"type": "Magic Cube Material"
+},
+"5427": {
+"name": "Godhead Contract - Prophet",
+"type": "Magic Cube Material"
+},
+"5428": {
+"name": "Godhead Contract - Iron Guard",
+"type": "Magic Cube Material"
+},
+"5429": {
+"name": "Godhead Contract - Lich",
+"type": "Magic Cube Materials"
+},
+"5430": {
+"name": "Divine Contract - Craftsman",
+"type": "Magic Cube Materials"
+},
+"5700": {
+"name": "Tower Chip - Energy",
+"type": "Tower Materials"
+},
+"5701": {
+"name": "Tower Chip - Fluorescence",
+"type": "Tower Materials"
+},
+"5702": {
+"name": "Tower Chip - Affix",
+"type": "Tower Materials"
+},
+"5703": {
+"name": "Tower Chip - Uncertain Fate",
+"type": "Tower Materials"
+},
+"5704": {
+"name": "Tower Chip - Corrosion",
+"type": "Tower Materials"
+},
+"5705": {
+"name": "Tower Chip - Treasure",
+"type": "Tower Materials"
+},
+"6002": {
+"name": "Secret of the Cold Abyss",
+"type": "Memory Fluorescence"
+},
+"6003": {
+"name": "The Crow's Cry",
+"type": "Memory Fluorescence"
+},
+"6004": {
+"name": "Black Calendar's Skill",
+"type": "Memory Fluorescence"
+},
+"6006": {
+"name": "Moon of Omens",
+"type": "Memory Fluorescence"
+},
+"6007": {
+"name": "Lost Treasure",
+"type": "Memory Fluorescence"
+},
+"6008": {
+"name": "The Price of Not Being Cruel",
+"type": "Memory Fluorescence"
+},
+"6019": {
+"name": "The Strange Stone at the Center of the Sun",
+"type": "Memory Fluorescence"
+},
+"6026": {
+"name": "Antonio's Help",
+"type": "Memory Fluorescence"
+},
+"6027": {
+"name": "Strange Stone of the Corona",
+"type": "Memory Fluorescence"
+},
+"6054": {
+"name": "Scholar's Strange Thought",
+"type": "Memory Fluorescence"
+},
+"6111": {
+"name": "Furicon Burst",
+"type": "Memory Fluorescence"
+},
+"6118": {
+"name": "Echoes of the Gods",
+"type": "Memory Fluorescence"
+},
+"6119": {
+"name": "The Stray Firefly",
+"type": "Memory Fluorescence"
+},
+"6125": {
+"name": "Hundred Million-Fold Windfall",
+"type": "Memory Fluorescence"
+},
+"6127": {
+"name": "Burn Together",
+"type": "Memory Fluorescence"
+},
+"6135": {
+"name": "Desecrating the Star Cluster",
+"type": "Memory Fluorescence"
+},
+"6139": {
+"name": "God's Supernova",
+"type": "Memory Fluorescence"
+},
+"6141": {
+"name": "Hollow Man's 😚",
+"type": "Memory Fluorescence"
+},
+"6143": {
+"name": "Second Level of Godhood",
+"type": "Memory Fluorescence"
+},
+"6147": {
+"name": "One-tenth Twin Reflection",
+"type": "Memory Fluorescence"
+},
+"6148": {
+"name": "One-hundredth Twin Reflection",
+"type": "Memory Fluorescence"
+},
+"6153": {
+"name": "Tomorrow's Direction",
+"type": "Memory Fluorescence"
+},
+"6205": {
+"name": "Unpredictable Direction",
+"type": "Memory Fluorescence"
+},
+"6216": {
+"name": "One-fifth Solitaire Boots",
+"type": "Memory Fluorescence"
+},
+"6217": {
+"name": "Unfettered Stars",
+"type": "Memory Fluorescence"
+},
+"6218": {
+"name": "The End of the Past",
+"type": "Memory Fluorescence"
+},
+"6219": {
+"name": "The Egg Day of the Past",
+"type": "Memory Fluorescence"
+},
+"6220": {
+"name": "Starry Sky",
+"type": "Memory Fluorescence"
+},
+"6221": {
+"name": "Still in the Mirror",
+"type": "Memory Fluorescence"
+},
+"8604": {
+"name": "Precision - Self-Discipline",
+"type": "Special Item"
+},
+"8608": {
+"name": "Precision - Intensive Enhancement",
+"type": "Special Item"
+},
+"8611": {
+"name": "Precision - Super Energy Symbiosis",
+"type": "Special Item"
+},
+"8614": {
+"name": "Precision - Throttling",
+"type": "Special Item"
+},
+"10001": {
+"name": "Sin's Plundering Compass",
+"type": "Compass"
+},
+"10002": {
+"name": "Sin's Plundering Compass (Relic)",
+"type": "Compass"
+},
+"10003": {
+"name": "Felonious Plundering Compass",
+"type": "Compass"
+},
+"10010": {
+"name": "Rare Compass",
+"type": "Compass"
+},
+"10011": {
+"name": "Linglang's Rare Compass",
+"type": "Compass"
+},
+"10012": {
+"name": "Pojun's Rare Compass",
+"type": "Compass"
+},
+"10022": {
+"name": "Soldier's Compass",
+"type": "Compass"
+},
+"10023": {
+"name": "Soldier's Compass of All Martial Arts",
+"type": "Compass"
+},
+"10032": {
+"name": "Elite Soldier's Compass",
+"type": "Compass"
+},
+"10033": {
+"name": "Enemy-Defeating Compass",
+"type": "Compass"
+},
+"10042": {
+"name": "Strong Enemy Compass",
+"type": "Compass"
+},
+"10043": {
+"name": "Gentle Rival Compass",
+"type": "Compass"
+},
+"10044": {
+"name": "Rich Rival Compass",
+"type": "Compass"
+},
+"10046": {
+"name": "Boss Compass",
+"type": "Compass"
+},
+"10050": {
+"name": "Beacon Compass",
+"type": "Compass"
+},
+"10051": {
+"name": "Beacon Compass of Gain",
+"type": "Compass"
+},
+"10052": {
+"name": "Zodiac Compass",
+"type": "Compass"
+},
+"10053": {
+"name": "Zodiac Compass of the Vastness",
+"type": "Compass"
+},
+"10054": {
+"name": "Zodiac Compass of the Ascension",
+"type": "Compass"
+},
+"10060": {
+"name": "Weapon Compass of Fame",
+"type": "Compass"
+},
+"10071": {
+"name": "Armed Compass",
+"type": "Compass"
+},
+"10072": {
+"name": "Armed Compass of Treasure",
+"type": "Compass"
+},
+"10073": {
+"name": "Armed Compass of Accessory",
+"type": "Compass"
+},
+"10081": {
+"name": "Compass of Ashes",
+"type": "Compass"
+},
+"10082": {
+"name": "BaiShou Ash Compass",
+"type": "Compass"
+},
+"10083": {
+"name": "Selected Ash Compass",
+"type": "Compass"
+},
+"10101": {
+"name": "Fluorescent Compass",
+"type": "Compass"
+},
+"10102": {
+"name": "Colorful Fluorescent Compass",
+"type": "Compass"
+},
+"10103": {
+"name": "Fluorescent Compass of Spotlight",
+"type": "Compass"
+},
+"10110": {
+"name": "Prosperous Gods Compass",
+"type": "Compass"
+},
+"10120": {
+"name": "Conquest Compass",
+"type": "Compass"
+},
+"10122": {
+"name": "Brave Compass",
+"type": "Compass"
+},
+"10130": {
+"name": "Mighty Compass",
+"type": "Compass"
+},
+"10131": {
+"name": "Prosperous Mighty Compass",
+"type": "Compass"
+},
+"10133": {
+"name": "Mighty Compass of Divine Might",
+"type": "Compass"
+},
+"10134": {
+"name": "Mecha Mighty Compass (Relic)",
+"type": "Compass"
+},
+"10140": {
+"name": "Hunting Compass",
+"type": "Compass"
+},
+"10142": {
+"name": "Shogun's Hunting Compass",
+"type": "Compass"
+},
+"10150": {
+"name": "Mechanical Compass",
+"type": "Compass"
+},
+"10151": {
+"name": "Glorious Mechanical Compass",
+"type": "Compass"
+},
+"10153": {
+"name": "Differentiation Mechanical Compass",
+"type": "Compass"
+},
+"10154": {
+"name": "Cruising Mechanical Compass (Relic)",
+"type": "Compass"
+},
+"10160": {
+"name": "Black Tide Compass",
+"type": "Compass"
+},
+"10161": {
+"name": "Black Tide Compass of the Bandit Leader",
+"type": "Compass"
+},
+"10162": {
+"name": "Divine Weapon Black Tide Compass",
+"type": "Compass"
+},
+"10170": {
+"name": "Black Sail Compass",
+"type": "Compass"
+},
+"10171": {
+"name": "Advent Black Sails Compass",
+"type": "Compass"
+},
+"10180": {
+"name": "Magic Cube Compass",
+"type": "Compass"
+},
+"10181": {
+"name": "Bipolar Magic Cube Compass",
+"type": "Compass"
+},
+"10182": {
+"name": "Desire's Cube Compass",
+"type": "Compass"
+},
+"10190": {
+"name": "Maze City Compass",
+"type": "Compass"
+},
+"10191": {
+"name": "Family's Maze City Compass",
+"type": "Compass"
+},
+"10200": {
+"name": "Dream Compass",
+"type": "Compass"
+},
+"10210": {
+"name": "Strange Story Compass",
+"type": "Compass"
+},
+"10211": {
+"name": "Strange Story Compass of the Stranger",
+"type": "Compass"
+},
+"10220": {
+"name": "Doll Compass",
+"type": "Compass"
+},
+"10221": {
+"name": "Collection of Doll Compass",
+"type": "Compass"
+},
+"10222": {
+"name": "Collection of Doll Compass (Legacy)",
+"type": "Compass"
+},
+"10230": {
+"name": "Painted Snow Compass",
+"type": "Compass"
+},
+"10231": {
+"name": "Harvest Painted Snow Compass",
+"type": "Compass"
+},
+"10240": {
+"name": "Tarot Compass",
+"type": "Compass"
+},
+"10241": {
+"name": "Hole Card Tarot Compass",
+"type": "Compass"
+},
+"10242": {
+"name": "Destiny Tarot Compass",
+"type": "Compass"
+},
+"10250": {
+"name": "Tycoon Compass",
+"type": "Compass"
+},
+"10260": {
+"name": "Wanted Compass",
+"type": "Compass"
+},
+"10261": {
+"name": "Wanted Compass with Bounty",
+"type": "Compass"
+},
+"10262": {
+"name": "Wanted Compass with Alert",
+"type": "Compass"
+},
+"10270": {
+"name": "Caged Compass",
+"type": "Compass"
+},
+"10272": {
+"name": "Golden Caged Compass",
+"type": "Compass"
+},
+"12000": {
+"name": "Prosperity Deep Probe",
+"type": "Compass"
+},
+"12001": {
+"name": "Prosperity Deep Space Probe",
+"type": "Compass"
+},
+"12010": {
+"name": "Equipment: Deep Space Probe",
+"type": "Compass"
+},
+"12011": {
+"name": "Equipment: Deep Space Probe",
+"type": "Compass"
+},
+"12020": {
+"name": "Ember's Deep Space Probe",
+"type": "Compass"
+},
+"12021": {
+"name": "Ember's Deep Space Probe",
+"type": "Compass"
+},
+"12030": {
+"name": "Fluorescent Deep Space Probe",
+"type": "Compass"
+},
+"12031": {
+"name": "Fluorescent Deep Space Probe",
+"type": "Compass"
+},
+"12040": {
+"name": "Compass's Deep Space Probe",
+"type": "Compass"
+},
+"12041": {
+"name": "Compass's Deep Space Probe",
+"type": "Compass"
+},
+"12050": {
+"name": "Beacon of the Deep Probe",
+"type": "Compass"
+},
+"100001": {
+"name": "Sin's Plundering Compass",
+"type": "Compass"
+},
+"100200": {
+"name": "First Fire Spirit Sand",
+"type": "Hard Currency"
+},
+"100300": {
+"name": "First Fire Element",
+"type": "Hard Currency"
+},
+"140004": {
+"name": "Light White Dream - Weapon",
+"type": "Dream Material"
+},
+"140005": {
+"name": "Light White Dream - Armor",
+"type": "Dream Material"
+},
+"140006": {
+"name": "Light White Dream - Accessory",
+"type": "Dream Material"
+},
+"200003": {
+"name": "High-Quality Ashes",
+"type": "Equipment Material"
+},
+"200021": {
+"name": "Fossil of Truth",
+"type": "Equipment Material"
+},
+"200028": {
+"name": "Precious Ashes",
+"type": "Equipment Material"
+},
+"200029": {
+"name": "Rare Ashes",
+"type": "Equipment Material"
+},
+"200030": {
+"name": "Ultimate Ashes",
+"type": "Equipment Material"
+},
+"210000": {
+"name": "Demon Core",
+"type": "Corrosion Material"
+},
+"210001": {
+"name": "Familiar Core",
+"type": "Corrosion Material"
+},
+"210002": {
+"name": "Axis of Decay",
+"type": "Erosion Material"
+},
+"210003": {
+"name": "Axis of Glory",
+"type": "Erosion Material"
+},
+"300006": {
+"name": "Holy Fossil",
+"type": "Equipment Material"
+},
+"330001": {
+"name": "Snow Paper Fragment",
+"type": "Special Item"
+},
+"338002": {
+"name": "Star Catcher",
+"type": "Special Item"
+},
+"339001": {
+"name": "Crazy Inspiration",
+"type": "Special Item"
+},
+"360403": {
+"name": "Basic Component",
+"type": "Tower Material"
+},
+"360404": {
+"name": "Expansion Component - Warlock",
+"type": "Tower Material"
+},
+"360405": {
+"name": "Expansion Component - Guardian",
+"type": "Tower Material"
+},
+"360406": {
+"name": "Expansion Component - Sniper",
+"type": "Tower Material"
+},
+"360407": {
+"name": "Expansion Component - Reload",
+"type": "Tower Material"
+},
+"370101": {
+"name": "Prism Calibrator - Rare",
+"type": "Overlay Material"
+},
+"370201": {
+"name": "Prism Calibrator - Legendary",
+"type": "Overlay Material"
+},
+"400006": {
+"name": "Beacon of the Frozen Abyss (Time 7)",
+"type": "Map Ticket"
+},
+"400007": {
+"name": "Beacon of the Frozen Abyss (Time 8)",
+"type": "Map Ticket"
+},
+"400008": {
+"name": "Deep Space Beacon",
+"type": "Map Ticket"
+},
+"400014": {
+"name": "Beacon in the Boiling Sea (Time 7)",
+"type": "Map Ticket"
+},
+"400015": {
+"name": "Beacon in the Boiling Sea (Time 8)",
+"type": "Map Ticket"
+},
+"400021": {
+"name": "Beacon in the Iron Realm (Time 7)",
+"type": "Map Ticket"
+},
+"400022": {
+"name": "Beacon in the Iron Realm (Time 8)",
+"type": "Map Ticket"
+},
+"400027": {
+"name": "Beacon in the Thunder Wasteland (Time 7)",
+"type": "Map Ticket"
+},
+"400028": {
+"name": "Beacon in the Thunder Wasteland (Time 8)",
+"type": "Map Ticket"
+},
+"400032": {
+"name": "Beacon in the Dark Night (Time 7)",
+"type": "Map Ticket"
+},
+"400033": {
+"name": "Beacon in the Dark Night (Time 8)",
+"type": "Map Ticket"
+},
+"410101": {
+"name": "Command: Answer the Question",
+"type": "Boss Ticket"
+},
+"410102": {
+"name": "Command: Diwo",
+"type": "Boss Ticket"
+},
+"410103": {
+"name": "Imperial Decree: Lu Yin",
+"type": "BOSS Ticket"
+},
+"410104": {
+"name": "Imperial Decree: Du Mu",
+"type": "BOSS Ticket"
+},
+"410201": {
+"name": "Invitation to the Void Sea - Desire",
+"type": "BOSS Ticket"
+},
+"410202": {
+"name": "Invitation to the Void Sea - Ecstasy",
+"type": "BOSS Ticket"
+},
+"410203": {
+"name": "Invitation to the Void Sea - Ouch",
+"type": "BOSS Ticket"
+},
+"410301": {
+"name": "Proto-nucleus of Desire - Record",
+"type": "BOSS Ticket"
+},
+"410302": {
+"name": "Proto-nucleus of Desire - Creation",
+"type": "BOSS Ticket"
+},
+"410303": {
+"name": "Desire Pronucleus - Destruction",
+"type": "BOSS Ticket"
+},
+"410401": {
+"name": "Queen🕯 - Imprisonment",
+"type": "BOSS Ticket"
+},
+"410402": {
+"name": "Queen🕯 - Pursuit",
+"type": "BOSS Ticket"
+},
+"410403": {
+"name": "Queen🕯 - Learning Hate",
+"type": "BOSS Ticket"
+},
+"410501": {
+"name": "Queen's Favor - Conquest",
+"type": "BOSS Ticket"
+},
+"410502": {
+"name": "Queen's Favor - Power",
+"type": "BOSS Ticket"
+},
+"410503": {
+"name": "Queen's Favor - Desire",
+"type": "Boss Ticket"
+},
+"430000": {
+"name": "The Beginning",
+"type": "Boss Ticket"
+},
+"430001": {
+"name": "The Beginning of the Beginning",
+"type": "Boss Ticket"
+},
+"430002": {
+"name": "The Beginning of the End",
+"type": "Boss Ticket"
+},
+"440001": {
+"name": "God's Emblem - Mechanical",
+"type": "God's Emblem"
+},
+"440002": {
+"name": "God's Emblem - Great Strength",
+"type": "God's Emblem"
+},
+"440003": {
+"name": "God's Emblem - Conquest",
+"type": "God's Emblem"
+},
+"440004": {
+"name": "God's Emblem - Hunting",
+"type": "God's Emblem"
+},
+"990005": {
+"name": "The Essence of the Mist",
+"type": "Game Ticket"
+},
+"990007": {
+"name": "Resident 😰 Eyes",
+"type": "Game Ticket"
+},
+"990091": {
+"name": "Conquering Ashes",
+"type": "Game Ticket"
+},
+"3000001": {
+"name": "Proof of the Weak I",
+"type": "Game Ticket"
+},
+"3000002": {
+"name": "Proof of the Weak II",
+"type": "Game Ticket"
+},
+"3000003": {
+"name": "Proof of the Strong III",
+"type": "Game Ticket"
+},
+"3000004": {
+"name": "Brave Proof IV",
+"type": "Gameplay Ticket"
+},
+"3000005": {
+"name": "Superman Proof V",
+"type": "Gameplay Ticket"
+}
+}
