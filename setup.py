@@ -9,7 +9,7 @@ options = {
 setup(
     version="0.0.1a4",
     options=options,
-    description="TorchFurry 火炬之光收益统计器 测试版",
-    console=['index.py'],
-    data_files=[('',['full_table.json',"更新日志.txt","注意事项.txt"])]
+    description="TorchFurry Torchlight Income Statistics Tool - English Version",
+    console=['index_english.py'],
+    data_files=[('',['full_table.json',"update_log.txt","instructions.txt"])]
 )

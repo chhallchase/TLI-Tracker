@@ -1,0 +1,6 @@
+1. Please first enter the game, then go to Settings - Other Settings and click "Enable Log"
+2. All drop information will be saved to the drop.txt file in the same folder
+3. As the official log format changes frequently, this software may become invalid. If it stops working, please look for updates and provide feedback on Taptap/Mushroom Forum
+This software version is V0.0.1a4
+Extract first, then use
+Click index_english.exe to run

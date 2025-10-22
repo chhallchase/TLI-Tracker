@@ -1,54 +1,55 @@
 # FurTorch
- FurTorch 火炬之光收益统计器 测试版
-## 打包方式
+ FurTorch Torchlight Income Statistics Tool - Test Version
+## Packaging Method
 ``` 
 pip install -r requirements.txt
 python setup.py py2exe
 ```
 
-## 代码解释
-<s>由于本来只打算自己用，所以代码写的说不上乱七八糟，那也算是七零八落，所以为了防止未来只有上帝知道每一段的意思，也为了方便二次开发，所以写了这一段</s>
+## Code Explanation
+<s>Since I originally only intended to use it myself, the code is written somewhat chaotically. To prevent only God knowing what each section means in the future, and to facilitate secondary development, I've written this section</s>
 
-### 全局变量释义
-| 变量名   | 释义               |
-|--------|------------------|
-| `t` |地图开始的时间戳，用于统计地图用时|
-| `show_all`| 显示当前地图掉落/总计掉落|
-|`is_in_map`| 是否在地图中|
+### Global Variable Definitions
+| Variable     | Definition                               |
+|--------------|------------------------------------------|
+| `t`          | Map start timestamp, used to track map time |
+| `show_all`   | Display current map drops/total drops      |
+| `is_in_map`  | Whether in map                           |
 
-### UI组件名
-| 组件名              | 释义              |
-|------------------|-----------------|
-| `label_time`     | 显示地图耗时，标签       |
-| `label_drop`     | 显示掉落，标签         |
-| `label_drop_all` | 显示掉落物的初火源质价值，标签 |
-| `button_change`  | 切换当前地图掉落/总掉落 显示，按钮 |
+### UI Component Names
+| Component Name     | Definition                           |
+|-------------------|-------------------------------------|
+| `label_time`      | Display map time, label             |
+| `label_drop`      | Display drops, label                |
+| `label_drop_all`  | Display drop item value, label      |
+| `button_change`   | Toggle current map drops/total drops display, button |
 
-### 函数释义
-| 函数名               | 释义                                                             |
-|-------------------|----------------------------------------------------------------|
-| `parse_log_structure`| 解析日志结构为json格式（主体AI生成后修改）                                       |
-| `scanned_log`| 搜索日志文件中关于掉落的部分，传递到parse函数                                      |
-|`deal_change`| 搜索进入/离开地图的信息<br>并传入scanner_log搜索掉落<br>并解析掉落的物品类别，数量<br>将信息写入数组 |
-|`change_states`| 由`button_change`触发，更改掉落显示|
-|`get_price_info`| 在您在交易所查价时，自动读取日志文件<br>更新通货价格（前30卖单平均数）|
-### 配置文件结构
+### Function Definitions
+| Function Name         | Definition                                                      |
+|----------------------|----------------------------------------------------------------|
+| `parse_log_structure`| Parse log structure into JSON format (modified after AI generation) |
+| `scanned_log`        | Search for drop-related parts in log file, pass to parse function |
+| `deal_change`        | Search for entering/leaving map info<br>Pass to scanner_log to search for drops<br>Parse dropped item categories, quantities<br>Write info to array |
+| `change_states`      | Triggered by `button_change`, change drop display |
+| `get_price_info`     | When you check prices on the exchange, automatically read log file<br>Update currency price (average of first 30 sell orders) |
+
+### Configuration File Structure
 ### id_table.conf 
-匹配日志文件的ID和掉落物名称
+Match log file IDs with drop item names
 ```
-<物品ID>[空格]<物品名称>
-示例：
-100200 初火灵砂
-100300 初火源质
+<Item ID>[space]<Item Name>
+Example:
+100200 Initial Fire Sand
+100300 Initial Fire Essence
 ```
 ### price.json
-物品价格文件
+Item price file
 ```
 {
-    "<物品名称>":<物品价格>,
-    "初火灵砂":999,
-    "初火源质":0
+    "<Item Name>":<Item Price>,
+    "Initial Fire Sand":999,
+    "Initial Fire Essence":0
 }
 ```
 
-当您发现掉落物不存在于id_table.conf或者价格有巨大变动时，您可以发ISSUE或在更改后发送PUSH,感谢
+When you discover a drop item that doesn't exist in id_table.conf or prices have significantly changed, you can submit an ISSUE or send a PUSH after making changes. Thank you
