@@ -1,0 +1,73 @@
+[2025-10-22 15:10:58] Final inventory after both bags: 50 items
+[2025-10-22 15:10:58]   Item 250001: 999
+[2025-10-22 15:10:58]   Item 5080: 2073
+[2025-10-22 15:10:58]   Item 300006: 59
+[2025-10-22 15:10:58]   Item 200021: 10
+[2025-10-22 15:10:58]   Item 3000002: 15
+[2025-10-22 15:10:58]   Item 5143: 399
+[2025-10-22 15:10:58]   Item 140005: 119
+[2025-10-22 15:10:58]   Item 201003: 751
+[2025-10-22 15:10:58]   Item 100200: 2997
+[2025-10-22 15:10:58]   Item 210002: 2
+[2025-10-22 15:10:58]   Item 5140: 1998
+[2025-10-22 15:10:58]   Item 100300: 1998
+[2025-10-22 15:10:58]   Item 3000005: 1
+[2025-10-22 15:10:58]   Item 5310: 25
+[2025-10-22 15:10:58]   Item 370101: 576
+[2025-10-22 15:10:58]   Item 100400: 19
+[2025-10-22 15:10:58]   Item 5700: 41
+[2025-10-22 15:10:58]   Item 5230: 502
+[2025-10-22 15:10:58]   Item 5250: 20
+[2025-10-22 15:10:58]   Item 990004: 2058
+[2025-10-22 15:10:58]   Item 10260: 11
+[2025-10-22 15:10:58]   Item 6007: 189
+[2025-10-22 15:10:58]   Item 400015: 66
+[2025-10-22 15:10:58]   Item 10083: 13
+[2025-10-22 15:10:58]   Item 10002: 20
+[2025-10-22 15:10:58]   Item 10191: 73
+[2025-10-22 15:10:58]   Item 10230: 8
+[2025-10-22 15:10:58]   Item 10220: 70
+[2025-10-22 15:10:58]   Item 10101: 6
+[2025-10-22 15:10:58]   Item 6006: 3
+[2025-10-22 15:10:58]   Item 10044: 2
+[2025-10-22 15:10:58]   Item 10231: 4
+[2025-10-22 15:10:58]   Item 10221: 12
+[2025-10-22 15:10:58]   Item 10071: 16
+[2025-10-22 15:10:58]   Item 10190: 28
+[2025-10-22 15:10:58]   Item 10140: 2
+[2025-10-22 15:10:58]   Item 10081: 4
+[2025-10-22 15:10:58]   Item 10052: 78
+[2025-10-22 15:10:58]   Item 430002: 18
+[2025-10-22 15:10:58]   Item 10060: 2
+[2025-10-22 15:10:58]   Item 10170: 23
+[2025-10-22 15:10:58]   Item 10032: 48
+[2025-10-22 15:10:58]   Item 430001: 30
+[2025-10-22 15:10:58]   Item 10133: 4
+[2025-10-22 15:10:58]   Item 10261: 1
+[2025-10-22 15:10:58]   Item 10151: 6
+[2025-10-22 15:10:58]   Item 10082: 9
+[2025-10-22 15:10:58]   Item 10023: 16
+[2025-10-22 15:10:58]   Item 6125: 10
+[2025-10-22 15:10:58]   Item 10134: 1
+[2025-10-22 15:11:42] Item 5028 increased from 0 to 1824, gained 1824
+[2025-10-22 15:36:56] Initializing inventory page 100 with 19 items
+[2025-10-22 15:36:56] Initializing inventory page 101 with 43 items
+[2025-10-22 15:36:56] Initializing inventory page 102 with 73 items
+[2025-10-22 15:36:56] Initializing inventory page 103 with 91 items
+[2025-10-22 15:37:20] Initializing inventory page 100 with 19 items
+[2025-10-22 15:37:20] Initializing inventory page 101 with 43 items
+[2025-10-22 15:37:20] Initializing inventory page 102 with 73 items
+[2025-10-22 15:37:20] Initializing inventory page 103 with 91 items
+[2025-10-22 15:37:48] Initializing inventory page 100 with 19 items
+[2025-10-22 15:37:48] Initializing inventory page 101 with 43 items
+[2025-10-22 15:37:48] Initializing inventory page 102 with 73 items
+[2025-10-22 15:37:48] Initializing inventory page 103 with 91 items
+[2025-10-22 15:40:37] Initializing inventory page 100 with 19 items
+[2025-10-22 15:40:37] Initializing inventory page 101 with 43 items
+[2025-10-22 15:40:37] Initializing inventory page 102 with 73 items
+[2025-10-22 15:40:37] Initializing inventory page 103 with 91 items
+[2025-10-22 15:47:48] Initializing inventory page 100 with 19 items
+[2025-10-22 15:47:48] Initializing inventory page 101 with 43 items
+[2025-10-22 15:47:48] Initializing inventory page 102 with 73 items
+[2025-10-22 15:47:48] Initializing inventory page 103 with 91 items
+[2025-10-22 15:47:48] All required pages initialized: {100, 101, 102, 103}
