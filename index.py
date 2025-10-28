@@ -282,7 +282,7 @@ def detect_bag_changes(text):
         init_key = f"init:{item_id}"
         initial_total = bag_state.get(init_key, 0)
         
-        # Calculate current total
+        # Calculate current total by summing all slots for this item
         current_total = 0
         for key, value in bag_state.items():
             if key.startswith("init:"):
@@ -297,7 +297,8 @@ def detect_bag_changes(text):
         if net_change != 0:
             changes.append((item_id, net_change))
             
-            # Update the initial count
+            # Update the baseline to current total for this item
+            # This ensures subsequent changes are measured from the new baseline
             bag_state[init_key] = current_total
     
     return changes
@@ -484,10 +485,17 @@ def process_drops(drops, item_id_table, price_table):
     """Process detected drops and consumption, update statistics"""
     global income, income_all, drop_list, drop_list_all, config_data
     
+    # First, consolidate multiple changes to the same item in this batch
+    consolidated_changes = {}
     for change in drops:
         item_id, amount = change
         item_id = str(item_id)
-        
+        if item_id not in consolidated_changes:
+            consolidated_changes[item_id] = 0
+        consolidated_changes[item_id] += amount
+    
+    # Now process the consolidated changes
+    for item_id, amount in consolidated_changes.items():
         # Check if we have a name for this item
         if item_id in item_id_table:
             item_name = item_id_table[item_id]
@@ -526,6 +534,10 @@ def process_drops(drops, item_id_table, price_table):
             income += price * amount
             income_all += price * amount
             
+            # If this is consumption (negative amount), immediately update the UI
+            if amount < 0:
+                root.reshow()
+            
         # Log to drop.txt
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if amount > 0:
@@ -540,6 +552,28 @@ def process_drops(drops, item_id_table, price_table):
         else:
             print(f"Processed consumption: {item_name} x{abs(amount)} ({round(price, 3)}/each)")
 
+def reset_map_baseline():
+    """Reset the baseline for map tracking to current inventory state"""
+    global bag_state
+    
+    # Calculate current totals for all items
+    item_totals = {}
+    for key, value in bag_state.items():
+        if not key.startswith("init:") and ":" in key:
+            parts = key.split(':')
+            if len(parts) == 3:
+                item_id = parts[2]
+                if item_id not in item_totals:
+                    item_totals[item_id] = 0
+                item_totals[item_id] += value
+    
+    # Update the init keys to current totals
+    for item_id, total in item_totals.items():
+        init_key = f"init:{item_id}"
+        bag_state[init_key] = total
+    
+    print(f"Reset map baseline for {len(item_totals)} items")
+
 def deal_change(changed_text):
     global root
     global is_in_map, all_time_passed, drop_list, income, t, drop_list_all, income_all, total_time, map_count
@@ -552,6 +586,10 @@ def deal_change(changed_text):
         drop_list = {}
         income = 0  # Start fresh for this map, costs will be tracked automatically
         map_count += 1
+        
+        # Reset baseline when entering a map - snapshot current state as starting point
+        # This needs to happen BEFORE processing any bag changes from this log batch
+        reset_map_baseline()
         
     if exiting_map:
         is_in_map = False
@@ -570,7 +608,7 @@ def deal_change(changed_text):
         print(f"Error loading item data: {e}")
         return
     
-    # Scan for bag changes (drops)
+    # Scan for bag changes (drops) - this will use the baseline set above if we just entered a map
     drops = scan_for_bag_changes(changed_text)
     if drops:
         process_drops(drops, id_table, price_table)
