@@ -11,7 +11,7 @@ This is the English version of the FurTorch Torchlight Infinite income statistic
    ```
 3. Run the English version of the application:
    ```
-   python index_english.py
+   python indexh.py
    ```
 
 ## Building Executable
