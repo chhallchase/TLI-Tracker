@@ -55,7 +55,6 @@ To create a standalone executable:
 
 - The application reads the Torchlight Infinite game log in real-time
 - Item prices are updated automatically from the server
-- All drop information is also saved to `drop.txt` in the same folder
 
 ## Troubleshooting
 
